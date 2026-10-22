@@ -1,82 +1,37 @@
 package application;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
-
-import entities.Aluno;
-import entities.Curso;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Program {
-	public static void main(String[] args) {
-		Scanner entrada = new Scanner(System.in);
-		
-		System.out.println("Quantos anlunos para o curso A?: ");
-		int n = entrada.nextInt();
-		entrada.nextLine();
-		
-		Set<Aluno> alunos = new HashSet<>();
-		Set<Curso> setCursoA = new HashSet<>();
-		for(int i = 0; i < n; i++) {
-			System.out.println("Aluno " + (i + 1));
-			int al = entrada.nextInt();
-			entrada.nextLine();
-			Aluno aluno = new Aluno(al);
-			alunos.add(aluno);
-			
-			Curso cursoA = new Curso(aluno);
-			setCursoA.add(cursoA);
-		}
 
-		System.out.println("Quantos anlunos para o curso B?: ");
-	    n = entrada.nextInt();
-		entrada.nextLine();
-		
-		Set<Curso> setCursoB = new HashSet<>();
-		for(int i = 0; i < n; i++) {
-			System.out.println("Aluno " + (i + 1));
-			int al = entrada.nextInt();
-			entrada.nextLine();
-			Aluno aluno = new Aluno(al);
-			alunos.add(aluno);
-			
-			Curso cursoB = new Curso(aluno);
-			setCursoB.add(cursoB);
-		}
-		
+    public static void main(String[] args) {
 
-		System.out.println("Quantos anlunos para o curso C?: ");
-	    n = entrada.nextInt();
-		entrada.nextLine();
-		
-		Set<Curso> setCursoC = new HashSet<>();
-		for(int i = 0; i < n; i++) {
-			System.out.println("Aluno " + (i + 1));
-			int al = entrada.nextInt();
-			entrada.nextLine();
-			Aluno aluno = new Aluno(al);
-			alunos.add(aluno);
-			
-			setCursoC.add(new Curso(aluno));
-		}
-		System.out.println("Total students: " + alunos.size());
-		
-		System.out.println("Alunos curso A: ");
-		for (Curso curso : setCursoA) {
-		    System.out.println(curso.getAlunos().getNumeroId());
-		}
-		
-		System.out.println("Alunos curso B: ");
-		for (Curso curso : setCursoB) {
-		    System.out.println(curso.getAlunos().getNumeroId());
-		}
-		
-		System.out.println("Alunos curso C: ");
-		for (Curso curso : setCursoC) {
-		    System.out.println(curso.getAlunos().getNumeroId());
-		}
+        String caminho = "C:/Users/kelvi/OneDrive/Documentos/exfiles/produtos.csv.txt";
 
-	}
+        try (BufferedReader br = new BufferedReader(new FileReader(caminho))) {
+
+            String line = br.readLine();
+
+            Map<String, Integer> votos = new HashMap<>();
+            while (line != null) {
+            	String[] candidatos = line.split(",");
+            	String nome = candidatos[0];
+            	int quantidade = Integer.parseInt(candidatos[1]);
+            	
+            	votos.put(nome, votos.getOrDefault(nome, 0) + quantidade);
+
+                line = br.readLine();
+            }
+            for (String nome : votos.keySet()) {
+                System.out.println(nome + ": " + votos.get(nome));
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
+        }
+    }
 }
